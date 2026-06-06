@@ -1,7 +1,17 @@
+import Terminal from "./components/Terminal/Terminal";
+
+const terminalLines = [
+  "> Initializing Shubham.exe...",
+  "> Loading 4 years of experience...",
+  "> Compiling skills...",
+  "> Connecting to neural network...",
+  "> Welcome to Shubham OS",
+];
+
 function App() {
   return (
     <div>
-      <h1>CodeNCraft</h1>
+      <Terminal lines={terminalLines} />
     </div>
   );
 }
