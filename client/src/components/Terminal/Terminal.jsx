@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 function Terminal({ lines }) {
   const [currentLine, setCurrentLine] = useState(0);
   const [currentLetters, setCurrentLetters] = useState(0);
-
+  const [showCursor, setShowCursor] = useState(true);
   useEffect(() => {
     if (currentLine >= lines.length) return;
 
@@ -23,6 +23,14 @@ function Terminal({ lines }) {
     return () => clearInterval(timer);
   }, [currentLine]);
 
+  useEffect(() => {
+    const cursorTimer = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 500);
+
+    return () => clearInterval(cursorTimer);
+  }, []);
+
   return (
     <div className="terminal-container">
       {lines.map((line, index) => {
@@ -38,6 +46,7 @@ function Terminal({ lines }) {
           return (
             <p className="terminal-line" key={index}>
               {line.slice(0, currentLetters)}
+              <span className="cursor">{showCursor ? "_" : " "}</span>
             </p>
           );
         }
