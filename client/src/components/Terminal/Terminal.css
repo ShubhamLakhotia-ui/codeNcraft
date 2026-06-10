@@ -6,8 +6,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: opacity 1s ease;
 }
-
+.exiting {
+  opacity: 0;
+  pointer-events: none;
+}
 .terminal-line {
   color: #00ff88;
   font-family: "Courier New", monospace;
@@ -18,4 +22,11 @@
   font-weight: bold;
   color: #ffffff;
   font-size: 20px;
+}
+
+.press-any-key {
+  margin-top: 20px;
+  color: #ffffff;
+  opacity: 0.7;
+  font-size: 14px;
 }

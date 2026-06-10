@@ -5,8 +5,15 @@ function Terminal({ lines }) {
   const [currentLine, setCurrentLine] = useState(0);
   const [currentLetters, setCurrentLetters] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
+  const [isDone, setIsDone] = useState(false);
+
+  const [isExiting, setIsExiting] = useState(false);
+
   useEffect(() => {
-    if (currentLine >= lines.length) return;
+    if (currentLine >= lines.length) {
+      setIsDone(true);
+      return;
+    }
 
     const timer = setInterval(() => {
       setCurrentLetters((prev) => {
@@ -31,8 +38,18 @@ function Terminal({ lines }) {
     return () => clearInterval(cursorTimer);
   }, []);
 
+  useEffect(() => {
+    if (!isDone) return;
+    const handleKeyPress = () => {
+      setIsExiting(true);
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [isDone]);
+
   return (
-    <div className="terminal-container">
+    <div className={`terminal-container ${isExiting ? "exiting" : ""}`}>
       {lines.map((line, index) => {
         if (index < currentLine) {
           return (
@@ -52,6 +69,12 @@ function Terminal({ lines }) {
         }
         return null;
       })}
+
+      {isDone && (
+        <p className="terminal-line press-any-key">
+          {showCursor ? "> Press any key to continue..." : ""}
+        </p>
+      )}
     </div>
   );
 }
