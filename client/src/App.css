@@ -1,0 +1,11 @@
+.home-brand { color: inherit; text-decoration: none; }
+.site-nav { display: flex; gap: 6px; }
+.site-nav a { color: #aaa; text-decoration: none; padding: 10px 14px; border-radius: 6px; font-size: 14px; }
+.site-nav a:hover { color: #fff; background: #202020; }
+.site-nav a[aria-current="page"] { color: #00ff88; background: #14251c; }
+.home a:focus-visible { outline: 2px solid #00ff88; outline-offset: 4px; }
+.page-link { display: inline-flex; gap: 16px; align-items: center; margin-top: 32px; padding: 14px 18px; border: 1px solid #00ff88; border-radius: 6px; color: #00ff88; text-decoration: none; font: 14px "Courier New", monospace; }
+.page-link:hover { background: #14251c; }
+@media (max-width: 600px) {
+  .home-status { flex-basis: 100%; }
+}

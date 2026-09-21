@@ -1,34 +1,28 @@
 import "./Terminal.css";
 import { useState, useEffect } from "react";
 
-function Terminal({ lines }) {
+function Terminal({ lines, onComplete }) {
   const [currentLine, setCurrentLine] = useState(0);
   const [currentLetters, setCurrentLetters] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
-  const [isDone, setIsDone] = useState(false);
+  const isDone = currentLine >= lines.length;
 
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    if (currentLine >= lines.length) {
-      setIsDone(true);
-      return;
-    }
+    if (isDone) return;
 
-    const timer = setInterval(() => {
-      setCurrentLetters((prev) => {
-        if (prev >= lines[currentLine].length) {
-          clearInterval(timer);
-          setCurrentLine((line) => line + 1);
-          setCurrentLetters(0);
-          return 0;
-        }
-        return prev + 1;
-      });
+    const timer = setTimeout(() => {
+      if (currentLetters >= lines[currentLine].length) {
+        setCurrentLine((line) => line + 1);
+        setCurrentLetters(0);
+      } else {
+        setCurrentLetters((prev) => prev + 1);
+      }
     }, 50);
 
-    return () => clearInterval(timer);
-  }, [currentLine]);
+    return () => clearTimeout(timer);
+  }, [currentLine, currentLetters, lines, isDone]);
 
   useEffect(() => {
     const cursorTimer = setInterval(() => {
@@ -47,6 +41,13 @@ function Terminal({ lines }) {
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [isDone]);
+
+  useEffect(() => {
+    if (!isExiting) return;
+    // Match the one-second fade before handing control back to App.
+    const timer = setTimeout(onComplete, 1000);
+    return () => clearTimeout(timer);
+  }, [isExiting, onComplete]);
 
   return (
     <div className={`terminal-container ${isExiting ? "exiting" : ""}`}>
@@ -71,9 +72,13 @@ function Terminal({ lines }) {
       })}
 
       {isDone && (
-        <p className="terminal-line press-any-key">
-          {showCursor ? "> Press any key to continue..." : ""}
-        </p>
+        <button
+          className="terminal-line press-any-key"
+          onClick={() => setIsExiting(true)}
+          disabled={isExiting}
+        >
+          &gt; Press any key or tap to continue...
+        </button>
       )}
     </div>
   );

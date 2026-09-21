@@ -1,0 +1,96 @@
+import { useEffect, useRef } from "react";
+import "./About.css";
+import { profile } from "../../data/profile";
+
+const interests = [
+  { number: "01", title: "Agentic AI", description: "Exploring AI through agents and interactive experiences." },
+  { number: "02", title: "Algorithms, at play", description: "Turning data structures and algorithms into games you can learn from." },
+  { number: "03", title: "Learning in public", description: "Making space for computer science notes, ideas, and lessons from building." },
+];
+
+function About() {
+  const headingRef = useRef(null);
+
+  useEffect(() => {
+    headingRef.current.focus();
+  }, []);
+
+  return (
+    <main className="home-main about-main">
+      <p className="home-eyebrow">&gt; whoami</p>
+      <h1 ref={headingRef} tabIndex={-1}>The builder behind<br /><span className="about-accent">codeNcraft.</span></h1>
+      <div className="about-intro">
+        <div>
+          <p className="about-role">{profile.name} / {profile.title}</p>
+          <p className="home-description">{profile.summary}</p>
+        </div>
+        <aside className="about-current" aria-label="Current project">
+          <p className="home-eyebrow">Currently building</p>
+          <strong>Shubham OS</strong>
+          <p>A personal workspace, starting with a terminal and growing one feature at a time.</p>
+          <span className="about-badge">In progress</span>
+        </aside>
+      </div>
+      <section className="about-section" aria-labelledby="experience-heading">
+        <p className="home-eyebrow">&gt; experience</p>
+        <h2 id="experience-heading">Where I've built</h2>
+        <div className="experience-list">
+          {profile.experience.map((job) => (
+            <details className="experience-item" key={`${job.company}-${job.role}`}>
+              <summary>
+                <span className="experience-heading"><strong>{job.role}</strong><span>{job.company}</span></span>
+                <span className="experience-meta">{job.dates}<span>{job.location}</span></span>
+                <span className="experience-toggle" aria-hidden="true" />
+              </summary>
+              <div className="experience-body">
+                <p>{job.summary}</p>
+                <ul>{job.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+      <section className="about-section" aria-labelledby="skills-heading">
+        <p className="home-eyebrow">&gt; toolkit</p>
+        <h2 id="skills-heading">What I work with</h2>
+        <div className="skills-grid">
+          {profile.skills.map((group) => (
+            <div className="skill-group" key={group.category}>
+              <h3>{group.category}</h3>
+              <ul className="skill-tags">{group.items.map((skill) => <li key={skill}>{skill}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section className="about-section" aria-labelledby="education-heading">
+        <p className="home-eyebrow">&gt; education</p>
+        <h2 id="education-heading">The foundations</h2>
+        <div className="education-grid">
+          {profile.education.map((school) => (
+            <article className="education-card" key={school.school}>
+              <h3>{school.school}</h3>
+              <p className="education-degree">{school.degree}</p>
+              <p>{school.dates} · {school.location}</p>
+              <span className="about-badge">GPA {school.gpa}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="about-interests" aria-labelledby="interests-heading">
+        <h2 id="interests-heading">What I'm exploring</h2>
+        <div className="interest-grid">
+          {interests.map((interest) => (
+            <article className="interest-card" key={interest.number}>
+              <span className="home-eyebrow" aria-hidden="true">/{interest.number}</span>
+              <h3>{interest.title}</h3>
+              <p>{interest.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <a className="page-link" href="#home"><span aria-hidden="true">←</span> Back to workspace</a>
+    </main>
+  );
+}
+
+export default About;
