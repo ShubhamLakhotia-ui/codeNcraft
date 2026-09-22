@@ -1,0 +1,8 @@
+{
+  "hosting": {
+    "public": "client/build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/*.map"],
+    "predeploy": ["npm --prefix client run build"],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  }
+}

@@ -15,10 +15,28 @@ function About() {
     headingRef.current.focus();
   }, []);
 
+  function jumpToSection(id) {
+    const heading = document.getElementById(id);
+    heading?.focus();
+    heading?.scrollIntoView({ behavior: "auto", block: "start" });
+  }
+
   return (
     <main className="home-main about-main">
+      <div className="about-path"><span>workspace / about</span><span>THE PERSON BEHIND THE CODE</span></div>
+      <div className="about-layout">
+      <nav className="about-index" aria-label="About sections">
+        <p>ON THIS PAGE</p>
+        <button onClick={() => jumpToSection("experience-heading")}>01 <span>Experience</span> ↓</button>
+        <button onClick={() => jumpToSection("skills-heading")}>02 <span>Toolkit</span> ↓</button>
+        <button onClick={() => jumpToSection("education-heading")}>03 <span>Education</span> ↓</button>
+        <button onClick={() => jumpToSection("interests-heading")}>04 <span>Exploring</span> ↓</button>
+        <a href="#home">← Back to workspace</a>
+      </nav>
+      <div className="about-content">
       <p className="home-eyebrow">&gt; whoami</p>
       <h1 ref={headingRef} tabIndex={-1}>The builder behind<br /><span className="about-accent">codeNcraft.</span></h1>
+      <p className="about-lead">From enterprise applications to AI workflows.</p>
       <div className="about-intro">
         <div>
           <p className="about-role">{profile.name} / {profile.title}</p>
@@ -31,12 +49,18 @@ function About() {
           <span className="about-badge">In progress</span>
         </aside>
       </div>
+      <div className="about-snapshot" aria-label="Career snapshot">
+        <div><strong>Annaly + Jio</strong><span>Software engineering experience</span></div>
+        <div><strong>Northeastern</strong><span>MS in Information Systems</span></div>
+        <div><strong>AI · APIs · Cloud</strong><span>Where my work connects</span></div>
+      </div>
       <section className="about-section" aria-labelledby="experience-heading">
         <p className="home-eyebrow">&gt; experience</p>
-        <h2 id="experience-heading">Where I've built</h2>
+        <h2 id="experience-heading" tabIndex={-1}>Where I've built</h2>
+        <p className="about-section-hint">Open a role to explore the work and its impact.</p>
         <div className="experience-list">
-          {profile.experience.map((job) => (
-            <details className="experience-item" key={`${job.company}-${job.role}`}>
+          {profile.experience.map((job, index) => (
+            <details className="experience-item" open={index === 0} key={`${job.company}-${job.role}`}>
               <summary>
                 <span className="experience-heading"><strong>{job.role}</strong><span>{job.company}</span></span>
                 <span className="experience-meta">{job.dates}<span>{job.location}</span></span>
@@ -52,7 +76,7 @@ function About() {
       </section>
       <section className="about-section" aria-labelledby="skills-heading">
         <p className="home-eyebrow">&gt; toolkit</p>
-        <h2 id="skills-heading">What I work with</h2>
+        <h2 id="skills-heading" tabIndex={-1}>What I work with</h2>
         <div className="skills-grid">
           {profile.skills.map((group) => (
             <div className="skill-group" key={group.category}>
@@ -64,7 +88,7 @@ function About() {
       </section>
       <section className="about-section" aria-labelledby="education-heading">
         <p className="home-eyebrow">&gt; education</p>
-        <h2 id="education-heading">The foundations</h2>
+        <h2 id="education-heading" tabIndex={-1}>The foundations</h2>
         <div className="education-grid">
           {profile.education.map((school) => (
             <article className="education-card" key={school.school}>
@@ -77,7 +101,7 @@ function About() {
         </div>
       </section>
       <section className="about-interests" aria-labelledby="interests-heading">
-        <h2 id="interests-heading">What I'm exploring</h2>
+        <h2 id="interests-heading" tabIndex={-1}>What I'm exploring</h2>
         <div className="interest-grid">
           {interests.map((interest) => (
             <article className="interest-card" key={interest.number}>
@@ -89,6 +113,8 @@ function About() {
         </div>
       </section>
       <a className="page-link" href="#home"><span aria-hidden="true">←</span> Back to workspace</a>
+      </div>
+      </div>
     </main>
   );
 }
