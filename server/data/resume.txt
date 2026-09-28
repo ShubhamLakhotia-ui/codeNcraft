@@ -1,0 +1,59 @@
+Source: Shubham_Lakhotia.pdf
+Extracted reference text; contact header omitted.
+## profile | profile | Shubham Lakhotia — overview
+AI Software Engineer experienced in building production LLM applications, RAG pipelines, and distributed systems. Skilled in Python, C#, Java, TypeScript, React, and .NET, with strong foundations in data structures, algorithms, OOP, and system design. Builds APIs, microservices, and data pipelines, and deploys AI applications across AWS and Azure.
+
+
+## education | education-0 | Northeastern University
+Northeastern University: MS, Information Systems (GPA: 3.9) Boston, USA | Jan 2024 – May 2026
+## education | education-1 | SRM University
+SRM University: BS, Computer Science (GPA: 3.7) Chennai, India | May 2017 – May 2021
+
+
+## experience | experience-0 | Annaly Capital Management — Software Engineer, Co-op
+Annaly Capital Management: Software Engineer, Co-op New York, USA | Jun 2025 – Dec 2025
+• Engineered high-performance C#/.NET Core and ASP.NET MVC APIs using async/await, multithreading, Dapper, and gRPC to process 1,000+ data updates/sec, validated through TDD-driven unit tests
+• Built React Native and WPF applications with real-time SSE/WebSocket rendering and Redux state management, reducing user response times by 30%
+• Designed an anomaly investigation system using an LLM with LangGraph, combining statistical outlier detection and RAG over historical data into multi-step workflows that generated contextual explanations for analysts
+• Developed an ML-based validation pipeline using Isolation Forest and rule-based checks to detect missing values, duplicates, schema violations, and anomalous records, reducing downstream data-quality incidents by 35%
+• Containerized Azure microservices with Docker and migrated on-prem MSSQL workloads to Azure SQL, reducing data latency by 40% through query and stored-procedure optimization
+## experience | experience-1 | Jio Platforms — Senior Software Engineer
+Jio Platforms: Senior Software Engineer Mumbai, IN | Jul 2022 – Dec 2023
+• Architected an enterprise RAG platform with LangChain, Elasticsearch, FastAPI, and React for 100,000+ employees, cutting support tickets by 35% and resolution time from 2 days to 10 minutes
+• Implemented a Module Federation micro-frontend platform in TypeScript, integrating 7+ React and Angular applications into a shared runtime and enabling independent releases across product teams
+• Led a team of 8 engineers while modernizing 15+ services with Docker, Kubernetes/AWS EKS, and Kafka, increasing deployment velocity by 40% and reducing deployment failures by 60%
+• Created an AI-powered Symptom Checker using React, Spring Boot, and Hibernate with OAuth 2.0 authentication, supporting a platform used by 10M+ users
+• Partnered with support and operations teams to analyze failed search queries and refine document ingestion and retrieval logic, reducing repeat escalations and improving answer accuracy
+## experience | experience-2 | Jio Platforms — Software Engineer
+Jio Platforms: Software Engineer Mumbai, IN | Jun 2021 – Jun 2022
+• Architected a React frontend and Java backend for an AI proctoring system using YOLO for face detection and TensorFlow CNNs for behavioral analysis, reducing exam malpractice by 30% and improving detection accuracy by 22%
+• Enhanced data retrieval by 35% by developing RESTful and GraphQL APIs with Node.js, MongoDB, and Redis caching with TTL-based expiration
+• Automated CI/CD pipelines and infrastructure provisioning using GitHub Actions and Azure DevOps, eliminating 40% of manual intervention across production deployments
+• Established a 30+ reusable component library using React and Angular, reducing duplicate code across 3 product teams and accelerating frontend development by 40%
+
+
+
+## skills | skills-0 | Languages
+Languages: TypeScript, JavaScript (ES6+), HTML5, CSS3, Java, Go, SQL, C#, Python, SCSS, Tailwind CSS, Swift
+## skills | skills-1 | Frameworks
+Frameworks: React.js, Node.js, Next.js, Spring Boot, .NET Core, ASP.NET MVC, FastAPI, Angular, NestJS, Express.js, GraphQL
+## skills | skills-2 | Databases
+Databases: Relational (PostgreSQL, MySQL, MSSQL, Amazon RDS, Azure SQL) | NoSQL (MongoDB, Redis, DynamoDB)
+## skills | skills-3 | Cloud & DevOps
+Cloud & DevOps: AWS, Azure, GCP, Linux, Docker, Kubernetes, Terraform, GitHub Actions, Azure DevOps, Jenkins, Kafka
+## skills | skills-4 | GenAI
+GenAI: LLMs, RAG, LangChain, LangGraph, MCP, Prompt Engineering, Embeddings, Semantic Search, Pinecone, OpenAI
+## skills | skills-5 | ML & CV
+ML & CV: PyTorch, TensorFlow, Scikit-learn, Pandas, NumPy, Isolation Forest, YOLO, CNN
+## skills | skills-6 | Tools
+Tools: Git, GitHub Copilot, Cursor, Storybook, Webpack, Selenium, Jest, Playwright, Snyk, Postman, Jira, SonarQube, VS Code
+
+
+## project | project-cloud | Cloud-Optimized Content Delivery Platform
+Cloud-Optimized Content Delivery Platform
+• Deployed Java and Go REST APIs on AWS, running containerized services on ECS backed by EC2 instances with auto-scaling and CloudWatch monitoring, and provisioned infrastructure using Terraform and GitHub Actions CI/CD
+• Built serverless auth workflows with Lambda, SQS, Step Functions, and DynamoDB for messaging and orchestration
+## project | project-logs | AI Log Analysis Agent
+AI Log Analysis Agent
+• Architected an LLM-powered log analysis agent using RAG, Claude API, and Model Context Protocol (MCP) to connect external tools and data sources, processing 5,000+ logs and generating structured root-cause summaries
+• Designed a PostgreSQL data layer with optimized indexing and Redis caching for real-time error detection and data integrity

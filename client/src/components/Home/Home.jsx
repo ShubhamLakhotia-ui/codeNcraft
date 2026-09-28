@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Home.css";
+import Assistant from "../Assistant/Assistant";
 
 import { projectDetails } from "../../data/projects";
 
@@ -81,8 +82,9 @@ function Home() {
               <button onClick={() => executeCommand("projects")}><strong>projects</strong><span>Explore my work ↓</span></button>
               <button onClick={() => { executeCommand("help"); commandRef.current.focus(); }}><strong>help</strong><span>Show all commands</span></button>
             </div>
-            <p className="command-response" role="status">{message}</p>
+            <p className="command-response" role="status" aria-label="Command result">{message}</p>
           </section>
+          {process.env.NODE_ENV !== "production" && <Assistant />}
           <section className="project-workbench" aria-labelledby="projects-heading">
             <div className="project-section-heading"><h2 id="projects-heading" ref={projectRef} tabIndex={-1}>Selected builds<span> / {String(Object.keys(projectDetails).length).padStart(2, "0")}</span></h2><span className="workspace-label">OPEN A PROJECT ↓</span></div>
             <div className="project-select" role="group" aria-label="Choose a project">

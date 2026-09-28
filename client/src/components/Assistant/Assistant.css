@@ -1,0 +1,13 @@
+.portfolio-assistant { margin-top: 32px; padding: clamp(18px, 3vw, 28px); border: 1px solid #3a483c; border-radius: 8px; background: #131814; }
+.portfolio-assistant h2 { margin: 10px 0; font-size: 24px; color: #eee; }
+.portfolio-assistant > p:not(.workspace-label), .assistant-response { color: #c0ccc3; font-size: 16px; line-height: 1.7; }
+.portfolio-assistant label { display: block; margin: 20px 0 10px; font-size: 15px; color: #eee; }
+.assistant-input-row { display: flex; gap: 12px; }
+.assistant-input-row input { flex: 1; min-width: 0; padding: 14px; background: #0d110e; border: 1px solid #465748; border-radius: 4px; color: #eee; font-size: 16px; }
+.assistant-input-row input::placeholder { color: #a1afa5; }
+.assistant-input-row button { padding: 12px 20px; border: 1px solid #00ff88; border-radius: 4px; color: #00ff88; background: #1b2b20; cursor: pointer; }
+.assistant-input-row button:disabled { opacity: .5; cursor: default; }
+.assistant-response p { margin-top: 20px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.portfolio-assistant .assistant-error { color: #ffb4ab; margin-top: 16px; }
+.portfolio-assistant small { display: block; margin-top: 18px; color: #a1afa5; font-size: 12px; line-height: 1.6; }
+@media (max-width: 520px) { .assistant-input-row { flex-direction: column; } .assistant-input-row button { min-height: 46px; } }

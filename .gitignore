@@ -126,6 +126,14 @@ service-account*.json
 service_account*.json
 application_default_credentials.json
 *.key
+*.pem
+*.p12
+*.pfx
+
+# Local editor recovery files
+*.swp
+*.swo
+*~
 
 # macOS folder metadata
 .DS_Store
@@ -152,3 +160,9 @@ application_default_credentials.json
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Backend generated output and local document-processing files
+/server/build/
+/server/tmp/
+/server/uploads/
+/server/data/cache/

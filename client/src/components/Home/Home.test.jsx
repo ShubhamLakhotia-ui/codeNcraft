@@ -12,9 +12,9 @@ afterEach(() => window.history.replaceState(null, "", "/"));
 test("supports help, unknown commands, project navigation, and about navigation", () => {
   render(<Home />);
   command("help");
-  expect(screen.getByRole("status").textContent).toContain("Available commands:");
+  expect(screen.getByRole("status", { name: "Command result" }).textContent).toContain("Available commands:");
   command("hello");
-  expect(screen.getByRole("status").textContent).toContain("Unknown command: hello");
+  expect(screen.getByRole("status", { name: "Command result" }).textContent).toContain("Unknown command: hello");
   command(" PROJECTS ");
   expect(document.activeElement).toBe(screen.getByRole("heading", { name: /selected builds/i }));
   command("about");
