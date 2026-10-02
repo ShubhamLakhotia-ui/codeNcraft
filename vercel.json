@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "",
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "server/data/resume.txt"
+    }
+  }
+}

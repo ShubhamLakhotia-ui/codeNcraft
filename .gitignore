@@ -166,3 +166,6 @@ vite.config.ts.timestamp-*
 /server/tmp/
 /server/uploads/
 /server/data/cache/
+
+# Local Vercel project metadata
+.vercel/

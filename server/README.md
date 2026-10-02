@@ -84,3 +84,21 @@ Run `npm run dev` in server and `npm start` in client in separate terminals.
 Restart the React development server after changing proxy settings.
 The browser never receives the Gemini key. Each submission is independent,
 with no conversation history. The UI times out after 30 seconds.
+
+## Vercel backend deployment
+
+Use the repository root (`.`), framework preset **Other**, and Node 22.x or newer.
+`vercel.json` configures the API functions and bundles the resume text.
+The root `public` directory is intentionally empty; Firebase serves the website.
+`api/health.mjs` and `api/chat.mjs` delegate to `server/app.js`, which handles
+requests without opening a port. `server/index.js` remains the local launcher.
+The shared handler accepts both Node streams and Vercel-parsed JSON bodies.
+It allows browser requests from the two Firebase domains and localhost:3000.
+CORS is a browser policy, not authentication or protection against quota abuse.
+
+Push these files before importing/deploying on Vercel. Add `GEMINI_API_KEY` in
+Vercel Environment Variables (Production). Never put its value in Git or the
+frontend. Keep Gemini billing disabled and Vercel on Hobby.
+After deployment, visit `https://YOUR-VERCEL-DOMAIN/api/health`.
+The frontend remains development-only until we configure its public API URL
+and publish it to Firebase in the next step.
