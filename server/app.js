@@ -120,7 +120,8 @@ async function handleChat(request, response) {
     sendJson(response, 200, {
       reply: await generateAnswer(message, sources),
       mode: sources.length ? "rag" : "no-match",
-      sources,
+      // The browser needs labels and navigation IDs, not the reference passages.
+      sources: sources.map(({ id, title }) => ({ id, title })),
     });
   } catch (error) {
     sendJson(response, error.status || 500, {
@@ -128,4 +129,3 @@ async function handleChat(request, response) {
     });
   }
 }
-

@@ -1,104 +1,51 @@
-# CraftNCode API — step 4
+# codeNcraft API
 
-This folder contains the local Node.js backend. It uses Node's built-in HTTP
-module, so there are no packages to install yet.
+Node.js backend shared by local development and Vercel. See the root
+[README](../README.md) for full setup, frontend configuration, and deployment.
 
-## Run locally
+## Run
 
-```bash
-cd /Users/shubhamlakhotia/Desktop/CraftNCode/codeNcraft/server
-npm run dev
-```
+Set `GEMINI_API_KEY` in `server/.env` using `.env.example` as a template, then run
+`npm run dev` from this folder. `npm start` runs without watching. No backend
+packages currently need installing. The local address is `http://127.0.0.1:3001`.
 
-Open http://127.0.0.1:3001/api/health to see:
+## Routes
 
-```json
-{"status":"ok","service":"craftncode-api"}
-```
+- `GET /api/health` returns `{ "status": "ok", "service": "craftncode-api" }`.
+- `POST /api/chat` accepts JSON `{ "message": "What did Shubham build at Annaly?" }`.
 
-`index.js` receives requests and sends JSON responses. `package.json` defines
-the start commands. `npm run dev` restarts the API when its code changes;
-`npm start` runs it without watching.
+Chat responses contain `reply`, `mode` (`rag` or `no-match`), and up to three
+`sources`. No matches returns a fixed response without calling Gemini.
 
-## Search portfolio information
+`index.js` loads local configuration and starts the listener. `app.js` handles
+routing, CORS, body parsing, validation, retrieval, and responses. Vercel’s
+`api/*.mjs` entry points import that same handler without starting a listener.
 
-`POST /api/chat` accepts a JSON body with a `message` string. Unlike the health
-check, opening this address in a browser tab will not work: that sends GET.
-Run this in another terminal while the server is running:
+Messages must contain 1–1,000 characters after trimming; request bodies are
+limited to 8 KB. CORS allows the configured Firebase domains and localhost:3000.
+CORS is not authentication or protection against API quota abuse.
 
-```bash
-curl http://127.0.0.1:3001/api/chat \
-  -H 'Content-Type: application/json' \
-  -d '{"message":"What has Shubham built with AWS?"}'
-```
+## Reference data and generation
 
-The response contains `mode: "rag"`, the Gemini answer in `reply`, and up to
-three retrieved `sources`. With no matches, it returns `mode: "no-match"` and
-a fixed message without calling Gemini. Sources are retrieved context, not
-verified sentence-level citations.
+`resume.js` loads `data/resume.txt`, whose headings follow
+`## category | id | title`. `retrieval.js` combines these sections with the curated
+`data/marketMonitor.js` reference and frontend project descriptions. Resume project
+entries replace older project entries with matching IDs.
 
-`index.js` loads `server/.env` at startup. Set `GEMINI_API_KEY` there; never put
-it in frontend code or commit it. `.env.example` is the safe empty template.
-`llm.js` sends the question and retrieved text to Gemini 3.1 Flash-Lite using
-Node's built-in fetch. It requests answers based only on those references,
-limits output to 600 tokens, times out after 20 seconds, and does not retry.
-Missing keys, quota limits, and provider failures return sanitized errors.
-Keep the Google project on the free tier with billing disabled. The code cannot
-enforce your Google billing settings. Requests send reference text to Google.
-Restart the API after changing `.env`. Tests use a fake provider and no quota.
+Retrieval removes common filler words and ranks exact keyword matches, with
+extra weight for titles and less-common terms. It does not use embeddings.
+Updating a source PDF does not automatically update these prepared references.
+Restart the backend after changing the resume text.
 
-`data/resume.txt` contains the extracted resume with its contact header omitted.
-Each `## category | id | title` heading marks one complete passage. These headings
-were added during preparation; PDF extraction is not run for each question.
-`resume.js` reads those sections at startup. `retrieval.js` combines them with
-portfolio projects, skipping older portfolio projects whose IDs occur in the resume.
-Resume sources have `source: "Shubham_Lakhotia.pdf"` and `url: null` because the
-PDF is not publicly hosted. Other projects have `source: "portfolio"`.
+`llm.js` sends the question and retrieved text to Gemini, requests a grounded
+third-person answer, and handles provider errors without exposing diagnostics.
+It uses a 20-second provider timeout, limits output to 600 tokens, and does not
+retry. Each question is independent. Keys remain on the backend.
 
-`tokenize` removes common conversational words. `retrievePassages` ranks exact
-keyword matches, giving extra weight to titles and less-common terms.
-This is not semantic search: paraphrases and broad questions may produce no
-results or incomplete matches. Restart the API after editing `data/resume.txt`.
-Updating the original PDF does not automatically update the extracted text.
-The visible About page is unchanged.
+The frontend derives tour destinations from returned source IDs. This backend
+does not currently implement model-selected navigation tools or an agent loop.
 
-Run `npm test` from this folder to check retrieval behavior. Use Node 22.12+
-(or a newer supported release) for importing the existing frontend data modules.
+## Test
 
-In `index.js`, `handleRequest` routes the request, `readJsonBody` reads the
-incoming JSON, `handleChat` validates the message and calls retrieval, and `sendJson` sends the result.
-Messages must contain 1–1,000 characters after trimming; bodies are limited to
-8 KB. Invalid JSON or messages return 400, oversized bodies return 413, wrong
-content types return 415, wrong methods return 405, and unknown paths return 404.
-
-The frontend connection and backend deployment will be added
-in separate steps. Firebase deployment still publishes only client/build.
-
-## Local question box
-
-`client/src/components/Assistant/Assistant.jsx` manages the question, loading,
-answer, and error states. Its stylesheet controls the layout. Home renders this
-component only in development until a public backend is configured.
-The client package's `proxy` forwards `/api/chat` to `http://127.0.0.1:3001`.
-Run `npm run dev` in server and `npm start` in client in separate terminals.
-Restart the React development server after changing proxy settings.
-The browser never receives the Gemini key. Each submission is independent,
-with no conversation history. The UI times out after 30 seconds.
-
-## Vercel backend deployment
-
-Use the repository root (`.`), framework preset **Other**, and Node 22.x or newer.
-`vercel.json` configures the API functions and bundles the resume text.
-The root `public` directory is intentionally empty; Firebase serves the website.
-`api/health.mjs` and `api/chat.mjs` delegate to `server/app.js`, which handles
-requests without opening a port. `server/index.js` remains the local launcher.
-The shared handler accepts both Node streams and Vercel-parsed JSON bodies.
-It allows browser requests from the two Firebase domains and localhost:3000.
-CORS is a browser policy, not authentication or protection against quota abuse.
-
-Push these files before importing/deploying on Vercel. Add `GEMINI_API_KEY` in
-Vercel Environment Variables (Production). Never put its value in Git or the
-frontend. Keep Gemini billing disabled and Vercel on Hobby.
-After deployment, visit `https://YOUR-VERCEL-DOMAIN/api/health`.
-The frontend remains development-only until we configure its public API URL
-and publish it to Firebase in the next step.
+Run `npm test` in this folder. Tests cover routes, retrieval, validation, and
+provider handling with a mocked AI provider; no real Gemini calls are made.

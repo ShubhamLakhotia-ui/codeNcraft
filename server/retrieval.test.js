@@ -2,6 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { retrievePassages } from "./retrieval.js";
 
+test("Market Monitor questions retrieve documented architecture and collaborative ownership", () => {
+  for (const question of ["What is Market Monitor?", "What did Shubham build in Market Monitor?", "How does Market Monitor use Redis and SSE?"]) {
+    const [result] = retrievePassages(question);
+    assert.equal(result.id, "project-market-monitor");
+    assert.match(result.text, /in collaboration with his manager/);
+    assert.match(result.text, /SQL Server/);
+    assert.match(result.text, /not order execution/);
+    assert.notEqual(result.source, "Shubham_Lakhotia.pdf");
+  }
+});
+
 test("retrieves AWS evidence including the cloud platform", () => {
   const results = retrievePassages("What has Shubham built with AWS?");
   assert.ok(results.some((item) => item.id === "project-cloud"));

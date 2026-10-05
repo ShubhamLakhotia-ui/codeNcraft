@@ -31,6 +31,7 @@ function About() {
         <button onClick={() => jumpToSection("skills-heading")}>02 <span>Toolkit</span> ↓</button>
         <button onClick={() => jumpToSection("education-heading")}>03 <span>Education</span> ↓</button>
         <button onClick={() => jumpToSection("interests-heading")}>04 <span>Exploring</span> ↓</button>
+        <button onClick={() => jumpToSection("contact-heading")}>05 <span>Contact me</span> ↓</button>
         <a href="#home">← Back to workspace</a>
       </nav>
       <div className="about-content">
@@ -110,6 +111,15 @@ function About() {
               <p>{interest.description}</p>
             </article>
           ))}
+        </div>
+      </section>
+      <section className="about-contact" aria-labelledby="contact-heading">
+        <p className="home-eyebrow">&gt; connect</p>
+        <h2 id="contact-heading" tabIndex={-1}>Let’s build something useful.</h2>
+        <p>Have an opportunity, a project idea, or a question about my work? Let’s talk.</p>
+        <div className="about-contact-links">
+          <a href="mailto:lakhotia.shubham06@gmail.com">Email me <span aria-hidden="true">↗</span></a>
+          <a href="https://linkedin.com/in/shubham619" target="_blank" rel="noopener noreferrer">LinkedIn <span className="contact-link-note">(opens in a new tab)</span> <span aria-hidden="true">↗</span></a>
         </div>
       </section>
       <a className="page-link" href="#home"><span aria-hidden="true">←</span> Back to workspace</a>

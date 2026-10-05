@@ -1,3 +1,4 @@
+import { marketMonitorPassages } from "./data/marketMonitor.js";
 import { loadResumePassages } from "./resume.js";
 import { projectDetails } from "../client/src/data/projects.js";
 
@@ -16,6 +17,7 @@ function buildPassages() {
   const resumeIds = new Set(resumePassages.map((passage) => passage.id));
   return [
     ...resumePassages,
+    ...marketMonitorPassages,
     ...Object.entries(projectDetails).filter(([id]) => !resumeIds.has(`project-${id}`)).map(([id, project]) => ({
       id: `project-${id}`, source: "portfolio", section: "project projects", title: project.name, url: "#home",
       text: `${project.name}. ${project.subtitle} ${project.description} Technologies: ${project.stack.join(", ")}. ${project.status ? `Status: ${project.status}. ` : ""}${(project.highlights || []).map((item) => `${item.title}: ${item.detail}`).join(" ")}`,

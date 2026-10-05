@@ -14,6 +14,34 @@ async function call(method, url, body, origin, stream = false) {
 test('health route works without starting a listener', async () => {
   assert.equal((await call('GET','/api/health')).data.status,'ok');
 });
+test('chat sends full context to Gemini but returns only source IDs and titles', async (t) => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  process.env.GEMINI_API_KEY = 'test-key';
+  t.after(() => {
+    if (originalKey === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = originalKey;
+  });
+  let providerReferences;
+  t.mock.method(globalThis, 'fetch', async (_url, options) => {
+    const payload = JSON.parse(options.body);
+    providerReferences = JSON.parse(payload.contents[0].parts[0].text).references;
+    return { ok: true, status: 200, json: async () => ({ candidates: [{
+      finishReason: 'STOP', content: { parts: [{ text: 'Market Monitor helps traders follow market changes.' }] },
+    }] }) };
+  });
+  for (const stream of [false, true]) {
+    const response = await call('POST', '/api/chat', { message: 'Market Monitor' }, undefined, stream);
+    assert.equal(response.status, 200);
+    assert.equal(response.data.mode, 'rag');
+    assert.ok(providerReferences.some(reference => reference.text.includes('Tradeweb')));
+    assert.ok(response.data.sources.some(source => source.id === 'project-market-monitor'));
+    for (const source of response.data.sources) {
+      assert.deepEqual(Object.keys(source).sort(), ['id', 'title']);
+      assert.equal(typeof source.title, 'string');
+    }
+    assert.ok(!JSON.stringify(response.data).includes('Tradeweb'));
+  }
+});
 test('local stream and hosted parsed body both work', async () => {
   for (const stream of [false,true]) {
     const response=await call('POST','/api/chat',{message:'weather tomorrow'},undefined,stream);
