@@ -1,44 +1,19 @@
-.terminal-container {
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 24px;
-  background-color: #0f0f0f;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 1s ease;
-}
-.exiting {
-  opacity: 0;
-  pointer-events: none;
-}
-.terminal-line {
-  color: #00ff88;
-  font-family: "Courier New", monospace;
-  font-size: 18px;
-  margin: 8px 0;
-}
-.cursor {
-  font-weight: bold;
-  color: #ffffff;
-  font-size: 20px;
-}
+.terminal-container { min-height: 100vh; min-height: 100svh; padding: 24px; background: #0f0f0f; display: flex; justify-content: center; align-items: center; transition: opacity 200ms ease; }
+.terminal-container.exiting { opacity: 0; pointer-events: none; }
+.boot-panel { width: 100%; max-width: 640px; padding: clamp(20px, 5vw, 40px); border: 1px solid #34463a; border-top: 2px solid #00ff88; background: #111a14; border-radius: 10px; font-family: "Courier New", monospace; }
+.boot-brand { color: #e2f2e7; font-size: clamp(23px, 5vw, 32px); letter-spacing: 2px; }
+.boot-brand > span { color: #00ff88; }
+.boot-version { color: #a8bcb0; font-size: 12px; margin-top: 12px; line-height: 1.6; }
+.boot-log { min-height: 190px; margin-top: 32px; }
+.terminal-line { color: #d0e0d5; font-size: clamp(14px, 2.5vw, 17px); line-height: 1.7; margin: 8px 0; }
+.boot-ok, .cursor { color: #00ff88; }
+.cursor { animation: boot-blink 800ms step-end infinite; }
+.boot-status { color: #b6c7bc; font-size: 14px; line-height: 1.6; }
+.boot-skip { margin-top: 20px; padding: 10px 14px; color: #00ff88; border: 1px solid #52735d; background: transparent; border-radius: 5px; cursor: pointer; font: inherit; }
+.boot-skip:focus-visible { outline: 2px solid #00ff88; outline-offset: 4px; }
+.boot-hint { margin-top: 16px; color: #9dae9f; font-size: 12px; line-height: 1.6; }
+@keyframes boot-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .terminal-container { transition: none; } .cursor { animation: none; } }
 
-.press-any-key {
-  background: transparent;
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 12px 16px;
-  cursor: pointer;
-  margin-top: 20px;
-  color: #ffffff;
-  opacity: 0.7;
-  font-size: 14px;
-}
-
-.press-any-key:focus-visible {
-  outline: 2px solid #00ff88;
-  outline-offset: 4px;
-}
+.boot-pause { margin-left: 10px; }
+@media (max-width: 500px) { .boot-pause { margin-left: 0; display: block; } }

@@ -1,5 +1,5 @@
 import { generateAnswer } from "./llm.js";
-import { retrievePassages } from "./retrieval.js";
+import { retrieveHybrid } from "./semantic.js";
 
 // Send every API response as JSON so a frontend can read it consistently.
 function sendJson(response, statusCode, data) {
@@ -116,7 +116,7 @@ async function handleChat(request, response) {
       return;
     }
 
-    const sources = retrievePassages(message);
+    const sources = await retrieveHybrid(message);
     sendJson(response, 200, {
       reply: await generateAnswer(message, sources),
       mode: sources.length ? "rag" : "no-match",

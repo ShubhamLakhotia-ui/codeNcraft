@@ -1,5 +1,22 @@
 // Resume projects and verified public GitHub README summaries.
 export const projectDetails = {
+  codeNcraft: {
+    name: "codeNcraft — AI-powered interactive portfolio",
+    label: "codeNcraft",
+    category: "AI ENGINEERING / FULL-STACK",
+    status: "You’re using it now · Semantic search is a local prototype",
+    subtitle: "Turning a static resume into a portfolio you can explore and question.",
+    description: "A React workspace where visitors explore experience chapters, browse projects, and ask questions grounded in resume and project references. A Node.js API retrieves supporting information and uses Google Gemini to write answers. Guided suggestions connect those answers to relevant work.",
+    stack: ["React", "JavaScript", "HTML / CSS", "Node.js", "Google Gemini API", "RAG", "Hugging Face Transformers.js", "MiniLM embeddings", "ONNX Runtime", "Hybrid retrieval", "Firebase Hosting", "Vercel", "Git / GitHub", "npm", "Jest", "React Testing Library", "Node.js test runner"],
+    highlights: [
+      { title: "An interactive workspace", detail: "Command shortcuts, selectable projects, experience chapters, responsive layouts, keyboard focus handling, and email and LinkedIn contact links." },
+      { title: "Grounded answers with Gemini", detail: "Prepared resume text and curated project references supply context to Gemini 3.1 Flash-Lite. The Node.js HTTP API validates requests, handles timeouts and provider errors, and keeps the API key on the backend. The browser receives source IDs and titles rather than full reference passages." },
+      { title: "A guided tour of the work", detail: "Retrieved source IDs map to allowed chapters and projects. Visitors choose when to navigate. This is reference-based navigation, not model-selected tool calling or an autonomous agent." },
+      { title: "Local semantic-search prototype", detail: "Hugging Face Transformers.js runs the quantized q8 Xenova/all-MiniLM-L6-v2 model through ONNX Runtime. Short overlapping reference passages are embedded in memory; vector similarity is combined with keyword rankings. Model files are cached locally, with no paid embedding API or vector database. Vercel compatibility is not yet validated." },
+      { title: "Two deployments, one application", detail: "Firebase Hosting serves the React production build. Vercel functions reuse the Node.js request handler for the API. Environment variables separate local and production configuration; CORS allows the configured frontend origins." },
+      { title: "Checks alongside the code", detail: "Jest and React Testing Library cover frontend interactions. Node’s built-in test runner checks API validation, retrieval, and mocked Gemini responses. A separate real-model check exercises semantic retrieval without calling Gemini. Git and GitHub track changes." },
+    ],
+  },
   logs: {
     name: "AI Log Analysis Agent",
     label: "Log Agent",
@@ -7,6 +24,12 @@ export const projectDetails = {
     subtitle: "From noisy logs to a useful explanation.",
     description: "An agentic workflow that processes logs, retrieves context, and produces structured root-cause summaries. Built with an LLM, RAG, a React dashboard, and a PostgreSQL data layer.",
     stack: ["React", "Node.js", "RAG", "Claude API", "PostgreSQL", "Redis"],
+    highlights: [
+      { title: "The problem", detail: "Application failures can leave clues scattered across many log entries. This project brings related evidence together into a structured explanation for a developer to investigate." },
+      { title: "How it works", detail: "The workflow processes logs, retrieves relevant context, and asks Claude to produce root-cause summaries. MCP connects external tools and data sources to the investigation workflow." },
+      { title: "Interface and data layer", detail: "A React dashboard presents the investigation. PostgreSQL provides the data layer, with indexing and Redis caching supporting retrieval and real-time error detection." },
+      { title: "Scope and demonstration", detail: "The resume describes processing 5,000+ logs. The walkthrough shown here uses a fixed illustrative sample; it does not run a live investigation or establish a confirmed root cause." },
+    ],
   },
   hommie: {
     name: "Hommie",
@@ -15,6 +38,12 @@ export const projectDetails = {
     subtitle: "A better starting point for student housing.",
     description: "A SwiftUI marketplace with personalized housing recommendations. A two-tower PyTorch model ranks listings using preferences and property embeddings, with transit, safety, and campus-distance data.",
     stack: ["SwiftUI", "PyTorch", "Firebase", "Recommendation systems"],
+    highlights: [
+      { title: "The problem", detail: "Student housing decisions involve more than rent alone. Hommie brings preferences such as commute, safety, and proximity to campus into personalized recommendations." },
+      { title: "How recommendations work", detail: "A two-tower PyTorch model represents a user and a property as numerical embeddings. Comparing these representations helps rank housing options against the user\u2019s preferences." },
+      { title: "Application and context", detail: "The SwiftUI marketplace provides the iOS interface, with Firebase in the application stack. Transit, safety, and campus-distance information adds context to the housing search." },
+      { title: "What the output means", detail: "The result is a ranked shortlist to explore, rather than a guarantee that a property is the right choice. Visitors can see the main recommendation steps below." },
+    ],
   },
   gitvisual: {
     name: "GitVisual Learn",
@@ -24,6 +53,8 @@ export const projectDetails = {
     description: "An interactive Git learning tool where commands animate commits, branches, and merges. A React interface visualizes repository state, with an Express backend and optional MySQL progress storage.",
     stack: ["React", "Vite", "Tailwind CSS", "Node.js", "Express", "MySQL"],
     highlights: [
+      { title: "The learning problem", detail: "Git commands can be difficult to understand when their effects are invisible. GitVisual Learn pairs command practice with a visual view of commits, branches, and merges." },
+      { title: "Frontend and backend", detail: "React renders the interactive workspace, Vite supports the frontend build, and Tailwind CSS styles the interface. A Node.js and Express backend supports the application; MySQL progress storage is optional." },
       { title: "Command-driven practice", detail: "Practice staging, commits, branching, switching, and merging in an interactive lab." },
       { title: "Visual repository state", detail: "Watch the commit graph change as you enter commands." },
       { title: "Optional persistence", detail: "Use MySQL to store progress, or run the app without a database." },
@@ -37,6 +68,8 @@ export const projectDetails = {
     description: "An OS course team project that simulates file management through both a command-line interface and a Java Swing GUI. Shared file-operation logic supports creating, copying, moving, searching, and restoring files.",
     stack: ["Java", "Swing", "CLI", "File management"],
     highlights: [
+      { title: "Project scope", detail: "A Java operating-systems course team project focused on simulated file management. It demonstrates file-operation behavior through a command line and a Swing desktop interface." },
+      { title: "The file workflow", detail: "Users can create, copy, move, and search for files. Both interfaces use shared operation logic, so the same core behavior is accessible through commands or desktop controls." },
       { title: "Two interfaces, shared logic", detail: "Manage files from either the terminal or a desktop interface." },
       { title: "Recoverable deletion", detail: "Move files to a recycle bin and restore them before emptying it." },
       { title: "Access control & logging", detail: "Simulate protected-folder access and record operations with timestamps and log levels." },
@@ -51,6 +84,8 @@ export const projectDetails = {
     description: "An in-progress React chat interface with typed messaging and browser-based voice recognition. Live transcripts preview speech, and completed phrases become messages. The current prototype uses demo replies; AI integration is planned.",
     stack: ["React", "JavaScript", "CSS", "Web Speech API"],
     highlights: [
+      { title: "The interaction model", detail: "This separate React prototype explores two ways to enter a conversation: typing a message or speaking through browser voice recognition. The visible transcript helps users see what was recognized." },
+      { title: "Technology and scope", detail: "React manages the conversation interface, JavaScript connects browser speech events, and CSS controls the presentation. Voice input depends on Web Speech API support; the prototype\u2019s replies are still demonstrations rather than generated AI answers." },
       { title: "Typed conversations", detail: "Send messages with Enter or the send button, with new messages kept in view." },
       { title: "Hands-free voice input", detail: "Start a listening session, preview the live transcript, and send completed phrases automatically in supported browsers." },
       { title: "Clear session controls", detail: "Stop listening at any time, with visible microphone status and error feedback." },
@@ -65,6 +100,8 @@ export const projectDetails = {
     description: "An AWS platform for user accounts and profile-image storage, built across three repositories: webapp, serverless, and tf-aws-infra. An Express API handles authenticated requests, S3 stores images, and an SNS-triggered Lambda sends account verification emails.",
     stack: ["Node.js", "Express", "AWS", "Terraform", "EC2", "S3", "RDS", "Lambda", "SNS", "Packer", "GitHub Actions"],
     highlights: [
+      { title: "How the pieces connect", detail: "The webapp handles account and image requests, the serverless repository handles email verification, and tf-aws-infra defines the AWS environment. Together they show application logic, background processing, and infrastructure as code." },
+      { title: "A request through the system", detail: "The API checks authentication and email-verification requirements before handling account or image operations. Images live in S3, while the database supports application data. Verification emails are handled through the SNS-to-Lambda path rather than inside the main request." },
       { title: "Webapp · accounts & content", detail: "Authenticated user APIs, email-verification checks, profile-image uploads and deletion in S3, and database health checks." },
       { title: "Serverless · event-driven verification", detail: "SNS events invoke a Lambda function that sends verification emails through SendGrid, retrieving its credentials from AWS Secrets Manager." },
       { title: "Infrastructure · defined in Terraform", detail: "Provision a VPC, public and private subnets, security groups, RDS, S3, and EC2 instances behind an HTTPS application load balancer." },

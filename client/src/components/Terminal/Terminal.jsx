@@ -1,87 +1,77 @@
 import "./Terminal.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const LINE_DELAY_MS = 1000;
+const AUTO_ENTER_DELAY_MS = 5500;
+const FADE_DURATION_MS = 200; // Matches the CSS opacity transition.
+const NON_SKIP_KEYS = new Set(["Tab", "Shift", "Control", "Alt", "Meta", "CapsLock"]);
 
 function Terminal({ lines, onComplete }) {
-  const [currentLine, setCurrentLine] = useState(0);
-  const [currentLetters, setCurrentLetters] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
-  const isDone = currentLine >= lines.length;
-
+  const skipRef = useRef(null);
+  const [paused, setPaused] = useState(false);
+  const [visibleLines, setVisibleLines] = useState(1);
   const [isExiting, setIsExiting] = useState(false);
 
+  useEffect(() => { skipRef.current?.focus(); }, []);
+
   useEffect(() => {
-    if (isDone) return;
+    const timers = lines.slice(1).map((_, index) =>
+      setTimeout(() => setVisibleLines(index + 2), (index + 1) * LINE_DELAY_MS));
+    return () => timers.forEach(clearTimeout);
+  }, [lines]);
 
-    const timer = setTimeout(() => {
-      if (currentLetters >= lines[currentLine].length) {
-        setCurrentLine((line) => line + 1);
-        setCurrentLetters(0);
-      } else {
-        setCurrentLetters((prev) => prev + 1);
-      }
-    }, 50);
-
+  useEffect(() => {
+    if (paused) return;
+    const timer = setTimeout(() => setIsExiting(true), AUTO_ENTER_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [currentLine, currentLetters, lines, isDone]);
+  }, [paused]);
 
   useEffect(() => {
-    const cursorTimer = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 500);
-
-    return () => clearInterval(cursorTimer);
-  }, []);
-
-  useEffect(() => {
-    if (!isDone) return;
-    const handleKeyPress = () => {
-      setIsExiting(true);
+    const skip = event => {
+      if (event.target instanceof Element && event.target.closest("button")) return;
+      if (!event.metaKey && !event.ctrlKey && !event.altKey && !NON_SKIP_KEYS.has(event.key)) onComplete();
     };
-
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [isDone]);
+    const preference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    const handleMotion = event => { if (event.matches) onComplete(); };
+    window.addEventListener("keydown", skip);
+    preference?.addEventListener?.("change", handleMotion);
+    return () => {
+      window.removeEventListener("keydown", skip);
+      preference?.removeEventListener?.("change", handleMotion);
+    };
+  }, [onComplete]);
 
   useEffect(() => {
     if (!isExiting) return;
-    // Match the one-second fade before handing control back to App.
-    const timer = setTimeout(onComplete, 1000);
+    const timer = setTimeout(onComplete, FADE_DURATION_MS);
     return () => clearTimeout(timer);
   }, [isExiting, onComplete]);
 
+  function skipIntro(event) {
+    event.stopPropagation();
+    onComplete();
+  }
+
+  function toggleAutoEntry(event) {
+    event.stopPropagation();
+    setPaused(value => !value);
+  }
+
   return (
-    <div className={`terminal-container ${isExiting ? "exiting" : ""}`}>
-      {lines.map((line, index) => {
-        if (index < currentLine) {
-          return (
-            <p className="terminal-line" key={index}>
-              {line}
-            </p>
-          );
-        }
-
-        if (index === currentLine) {
-          return (
-            <p className="terminal-line" key={index}>
-              {line.slice(0, currentLetters)}
-              <span className="cursor">{showCursor ? "_" : " "}</span>
-            </p>
-          );
-        }
-        return null;
-      })}
-
-      {isDone && (
-        <button
-          className="terminal-line press-any-key"
-          onClick={() => setIsExiting(true)}
-          disabled={isExiting}
-        >
-          &gt; Press any key or tap to continue...
-        </button>
-      )}
-    </div>
+    <main className={`terminal-container ${isExiting ? "exiting" : ""}`} onClick={onComplete}>
+      <div className="boot-panel">
+        <div className="boot-brand"><span aria-hidden="true">✳</span> SHUBHAM OS</div>
+        <p className="boot-version">PERSONAL WORKSPACE / v1.0</p>
+        <div className="boot-log" aria-hidden="true">
+          {lines.slice(0, visibleLines).map(line => <p className="terminal-line" key={line}><span className="boot-ok">[ OK ]</span> {line}</p>)}
+          <span className="cursor">_</span>
+        </div>
+        <p className="boot-status" role="status">Opening your workspace…</p>
+        <button ref={skipRef} className="boot-skip" onClick={skipIntro}>Skip intro ↗</button>
+        <button className="boot-skip boot-pause" disabled={isExiting} aria-pressed={paused} onClick={toggleAutoEntry}>{paused ? "Resume automatic entry" : "Stay on this screen"}</button>
+        <p className="boot-hint">{paused ? "Automatic entry paused · Skip intro when you’re ready" : "Opens automatically · Tap or press a key to skip"}</p>
+      </div>
+    </main>
   );
 }
-
 export default Terminal;

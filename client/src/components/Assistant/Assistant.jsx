@@ -166,7 +166,7 @@ export default function Assistant({ onShowProject }) {
       )}
       <details className="assistant-explainer">
         <summary>How this works</summary>
-        <ol><li><strong>You ask</strong><span>A question about my work.</span></li><li><strong>Retrieve</strong><span>Keyword search finds resume and project sections.</span></li><li><strong>Generate</strong><span>Gemini writes an answer using those references.</span></li></ol>
+        <ol><li><strong>You ask</strong><span>A question about my work.</span></li><li><strong>Retrieve</strong><span>Search finds relevant resume and project sections.</span></li><li><strong>Generate</strong><span>Gemini writes an answer using those references.</span></li></ol>
         <p>This is retrieval augmented generation (RAG). If search finds no matches, Gemini is not called. References are context, not verified citations.</p>
       </details>
       {error && (

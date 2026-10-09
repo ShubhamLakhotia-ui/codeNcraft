@@ -12,7 +12,7 @@ function Home() {
   const [message, setMessage] = useState(
     "Try a command, or use the launcher. Make yourself at home.",
   );
-  const [project, setProject] = useState("logs");
+  const [project, setProject] = useState("codeNcraft");
   const [analyzed, setAnalyzed] = useState(false);
   const selected = projectDetails[project];
 
@@ -314,7 +314,8 @@ function Home() {
                     </li>
                   </ol>
                 </div>
-              ) : (
+              ) : null}
+              {selected.highlights && (
                 <div className="project-highlights">
                   <h4>Inside the project</h4>
                   <ul>

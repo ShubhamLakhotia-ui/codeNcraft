@@ -1,19 +1,28 @@
 import Terminal from "./components/Terminal/Terminal";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Home from "./components/Home/Home";
 import About from "./components/About/About";
 import "./App.css";
 
 const terminalLines = [
-  "> Initializing Shubham.exe...",
-  "> Loading 4 years of experience...",
-  "> Compiling skills...",
-  "> Connecting to neural network...",
-  "> Welcome to Shubham OS",
+  "Starting workspace…",
+  "Mounting projects…",
+  "Loading experience: Annaly · Jio",
+  "System ready.",
 ];
 
+function skipBoot() {
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return true;
+  try { return sessionStorage.getItem("shubham-os-booted") === "true"; }
+  catch { return false; }
+}
+
 function App() {
-  const [showHome, setShowHome] = useState(false);
+  const [showHome, setShowHome] = useState(skipBoot);
+  const completeBoot = useCallback(() => {
+    try { sessionStorage.setItem("shubham-os-booted", "true"); } catch { /* Storage may be unavailable. */ }
+    setShowHome(true);
+  }, []);
   const [page, setPage] = useState(() => window.location.hash === "#about" ? "about" : "home");
 
   useEffect(() => {
@@ -36,13 +45,14 @@ function App() {
           <a href="#home" aria-current={page === "home" ? "page" : undefined}>Home</a>
           <a href="#about" aria-current={page === "about" ? "page" : undefined}>About</a>
         </nav>
+        <button className="replay-boot" onClick={() => setShowHome(false)}>Replay boot ↻</button>
         <span className="home-status">Shubham OS / ready</span>
       </header>
       {page === "about" ? <About /> : <Home />}
       <footer className="home-footer">Built from scratch. One commit at a time.</footer>
     </div>
   ) : (
-    <Terminal lines={terminalLines} onComplete={() => setShowHome(true)} />
+    <Terminal lines={terminalLines} onComplete={completeBoot} />
   );
 }
 export default App;

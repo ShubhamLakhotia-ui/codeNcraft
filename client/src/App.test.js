@@ -3,41 +3,42 @@ import App from "./App";
 
 beforeEach(() => {
   window.history.replaceState(null, "", "/");
+  sessionStorage.clear();
   jest.useFakeTimers();
 });
 afterEach(() => jest.useRealTimers());
 
-function finishTyping() {
-  for (let step = 0; step < 200; step += 1) {
-    act(() => jest.advanceTimersByTime(50));
-  }
-}
-
-test.each(["keyboard", "button"])("opens home after the fade using %s", (input) => {
+test("automatically enters after the readable boot sequence and skips repeat boots in the session", () => {
+  const { unmount } = render(<App />);
+  expect(screen.getByRole("button", { name: /skip intro/i })).toBeTruthy();
+  act(() => jest.advanceTimersByTime(5500));
+  act(() => jest.advanceTimersByTime(200));
+  expect(screen.getByRole("heading", { name: /I build systems/i })).toBe(document.activeElement);
+  unmount();
   render(<App />);
-  fireEvent.keyDown(window, { key: "Enter" });
-  expect(screen.queryByRole("heading")).toBeNull();
-  finishTyping();
-  const button = screen.getByRole("button", { name: /continue/i });
+  expect(screen.queryByRole("button", { name: /skip intro/i })).toBeNull();
+});
 
-  if (input === "keyboard") {
-    fireEvent.keyDown(window, { key: "Enter" });
-  } else {
-    fireEvent.click(button);
-  }
+test.each(["keyboard", "button"])("skips immediately using %s", input => {
+  render(<App />);
+  if (input === "keyboard") fireEvent.keyDown(window, { key: "Enter" });
+  else fireEvent.click(screen.getByRole("button", { name: /skip intro/i }));
+  expect(screen.getByRole("heading", { name: /I build systems/i })).toBe(document.activeElement);
+});
 
-  expect(screen.queryByRole("heading")).toBeNull();
-  act(() => jest.advanceTimersByTime(1000));
-  const heading = screen.getByRole("heading", { name: /I build systems/i });
-  expect(document.activeElement).toBe(heading);
-  expect(screen.queryByRole("button", { name: /continue/i })).toBeNull();
+test("reduced motion bypasses the intro", () => {
+  const original = window.matchMedia;
+  window.matchMedia = () => ({ matches: true });
+  try {
+    render(<App />);
+    expect(screen.queryByRole("button", { name: /skip intro/i })).toBeNull();
+    expect(screen.getByRole("heading", { name: /I build systems/i })).toBeTruthy();
+  } finally { window.matchMedia = original; }
 });
 
 test("switches between About and Home when the address changes", () => {
   render(<App />);
-  finishTyping();
-  fireEvent.click(screen.getByRole("button", { name: /continue/i }));
-  act(() => jest.advanceTimersByTime(1000));
+  fireEvent.click(screen.getByRole("button", { name: /skip intro/i }));
   expect(screen.getByRole("link", { name: /meet the builder/i }).getAttribute("href")).toBe("#about");
 
   act(() => {
@@ -55,3 +56,16 @@ test("switches between About and Home when the address changes", () => {
   expect(screen.getByRole("heading", { name: /I build systems/i })).toBe(document.activeElement);
   expect(screen.queryByRole("button", { name: /continue/i })).toBeNull();
 });
+
+ test("replays the intro and can pause automatic entry", () => {
+  render(<App />);
+  fireEvent.click(screen.getByRole("button", { name: /skip intro/i }));
+  fireEvent.click(screen.getByRole("button", { name: /replay boot/i }));
+  fireEvent.click(screen.getByRole("button", { name: /stay on this screen/i }));
+  act(() => jest.advanceTimersByTime(10000));
+  expect(screen.getByRole("button", { name: /resume automatic entry/i })).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: /resume automatic entry/i }));
+  act(() => jest.advanceTimersByTime(5500));
+  act(() => jest.advanceTimersByTime(200));
+  expect(screen.getByRole("heading", { name: /I build systems/i })).toBeTruthy();
+ });

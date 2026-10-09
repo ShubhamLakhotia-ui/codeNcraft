@@ -12,7 +12,7 @@ function tokenize(text) {
 }
 
 // Resume entries replace older portfolio versions with the same project ID.
-function buildPassages() {
+export function buildPassages() {
   const resumePassages = loadResumePassages();
   const resumeIds = new Set(resumePassages.map((passage) => passage.id));
   return [
@@ -37,8 +37,12 @@ export function retrievePassages(question) {
   let terms = tokenize(question);
   // A name-only introduction loses all its words during filler removal.
   // Route it to the overview, but keep specific questions on normal search.
+  // Normalize a common transposition only for the introduction intent check.
+  // Keep the full-question match so unrelated questions do not become biographies.
+  const introductionQuestion = question.trim().replace(/\s+/g, " ")
+    .replace(/\bintorduce\b/gi, "introduce");
   const asksForIntroduction = /^(?:please\s+)?(?:tell me about|who is|describe|introduce)\s+shubham(?:\s+lakhotia)?[.!?]*$/i
-    .test(question.trim());
+    .test(introductionQuestion);
   if (asksForIntroduction) terms = ["overview"];
   if (!terms.length) return [];
 

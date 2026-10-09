@@ -49,3 +49,24 @@ does not currently implement model-selected navigation tools or an agent loop.
 
 Run `npm test` in this folder. Tests cover routes, retrieval, validation, and
 provider handling with a mocked AI provider; no real Gemini calls are made.
+
+## Local semantic search prototype
+
+Run `npm ci` in `server` to install the embedding runtime. Set
+`SEMANTIC_SEARCH=true` in `server/.env` and restart the local API. Startup warms a
+quantized MiniLM model, downloaded once from Hugging Face into the ignored
+`server/data/cache/models/` directory. Reference chunks are embedded once per
+process; questions are embedded locally. No paid embedding API or vector database
+is used. Gemini answer generation still uses the existing API quota.
+
+`semantic.js` compares normalized vectors, rejects weak semantic matches, and
+combines semantic and keyword ranks. It falls back to keyword search on model
+failure. The similarity cutoff is a heuristic, not a confidence guarantee.
+Run `node server/scripts/check-semantic.js` from the repository root for real-model
+checks without calling Gemini. Ordinary `npm test` does not download the model.
+
+This is enabled locally only. Leave `SEMANTIC_SEARCH` unset on Vercel: native
+runtime size, model packaging, writable cache location, and cold starts have not
+yet been validated for deployment. Very vague questions can still retrieve poor
+matches. Updating reference files requires rebuilding the in-memory index by
+restarting the API.

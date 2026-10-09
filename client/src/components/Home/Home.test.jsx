@@ -23,19 +23,20 @@ test("supports help, unknown commands, project navigation, and about navigation"
 
 test("reveals and resets the sample analysis and switches to Hommie", () => {
   render(<Home />);
+  fireEvent.click(screen.getByRole("button", { name: /02 \/ Log Agent/i }));
   expect(screen.queryByText(/Hypothesis:/)).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: /reveal sample analysis/i }));
   expect(screen.getByText(/Hypothesis: connection pool exhaustion/)).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: /reset walkthrough/i }));
   expect(screen.queryByText(/Hypothesis:/)).toBeNull();
-  fireEvent.click(screen.getByRole("button", { name: /02 \/ Hommie/i }));
+  fireEvent.click(screen.getByRole("button", { name: /03 \/ Hommie/i }));
   expect(screen.getByRole("heading", { name: "Hommie" })).toBeTruthy();
   expect(screen.queryByRole("button", { name: /reveal sample analysis/i })).toBeNull();
 });
 
 test.each([
-  ["03 / GitVisual Learn", "GitVisual Learn"],
-  ["04 / MiniOS", "MiniOS"],
+  ["04 / GitVisual Learn", "GitVisual Learn"],
+  ["05 / MiniOS", "MiniOS"],
 ])("opens %s without GitHub links", (button, title) => {
   render(<Home />);
   fireEvent.click(screen.getByRole("button", { name: button }));

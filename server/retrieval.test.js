@@ -81,11 +81,12 @@ test("updated resume projects replace older project descriptions", () => {
 
 
 test("general introductions retrieve the resume overview", () => {
-  for (const question of ["Tell me about shubham", "Who is Shubham Lakhotia?", "Please introduce Shubham."]) {
+  for (const question of ["Tell me about shubham", "Who is Shubham Lakhotia?", "Please introduce Shubham.", "Intorduce shubham", "Please intorduce Shubham Lakhotia!", "  Introduce   Shubham  "]) {
     const [result] = retrievePassages(question);
     assert.equal(result.id, "profile", question);
     assert.equal(result.source, "Shubham_Lakhotia.pdf");
     assert.match(result.text, /AI Software Engineer/);
   }
   assert.equal(retrievePassages("Tell me about Shubham Annaly experience")[0].id, "experience-0");
+  assert.deepEqual(retrievePassages("Intorduce Shubham favorite food"), []);
 });
